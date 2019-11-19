@@ -1,0 +1,77 @@
+String ced = "";                                                         // variable para cadena de caracteres
+String comp, c;
+int num, mul, res;
+int vec [10] = {2, 1, 2, 1, 2, 1, 2, 1, 2};
+int i = 0;
+int sum = 0;;
+
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Ingrese un numero de cedula");
+  delay(100);
+  Serial.println();
+}
+
+void loop() {
+  if (Serial.available() > 0)                                             // condicion que verifica si el valor actual en el terminal es mayor a 0
+  {
+    ced = Serial.readStringUntil('\n');                                  //Capturar la cédula sin el Enter
+    Serial.println("");
+    if (ced.length() == 11)                                             // Condicion para el limite de los caracteres = 11
+    {
+      if (ced.substring(9, 10) == "-")                                  //Validador del estado actual del guión
+      {
+        
+        Serial.println();
+        delay(200);
+        c = ced.substring(0, ced.indexOf("-")) + ced.substring(10, 11); //Quitar el guión para facilitar la verificación, ademas de realizar la busqueda ascci de un caracter especifico entre todos los caracteres
+          if (ced.substring(2, 3).toInt() < 6)                          // Condicion 2 primeros digitos menores a 6
+        {
+          comp = ced.substring(10, 11);                                 //Condicion que valida el ultimo digito de la cedula
+          num = comp.toInt();
+         
+          for (i = 0; i < c.length() ; i++) {                           //verificacion del digito verificador multiplicado por los 9 digitos
+            mul = vec[i] * ced.substring(i, i + 1).toInt();
+            if (mul > 9) {
+              mul = mul - 9;                                             //Multimplicacion por 2 a los numeros impares del vector, si es > a 9 se le resta 9 al resultado
+            }
+            sum = mul + sum;
+          }
+          
+          if (sum % 10 == 0) {
+            if (sum / 10 == c.substring(9, 10).toInt())                  // condiciones contrarios en caso de no cumplirse las afirmaciones
+            {
+              Serial.println("La cedula es correcta");
+              }
+          } else {
+            res = (((sum / 10) + 1) * 10) - sum;
+            if (res == c.substring(9, 10).toInt()) {
+              Serial.println("La cedula es correcta");
+              sum = 0;
+             }
+          }
+        }
+        else
+        {
+          Serial.println("Ingrese un numero de cedula valido");
+          Serial.println();
+        }
+      }
+      else
+      {
+        Serial.println("Ingrese un numero de cedula valido");
+        Serial.println();
+      }
+    }
+    else
+    {
+      Serial.println("Ingrese un numero de cedula valido");
+      Serial.println();
+    }
+    ced = "";
+  }
+}
+      
+        
+            
