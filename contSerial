@@ -1,0 +1,24 @@
+int led = 9;
+long num;
+void setup() {
+        Serial.begin(9600);   // Inicializamos  el puerto serie  
+  
+        pinMode(led, OUTPUT);
+        Serial.println("Ingrese un bit: ");
+        digitalWrite(led, LOW);
+}
+void loop() {
+  
+         num = Serial.parseInt();
+        if(Serial.available()>0){
+          Serial.println("\n");
+          Serial.println("Numero leido");
+          delay(30);
+          
+            if(num < 0|| num > 1024){
+                digitalWrite(led,HIGH);
+              } else {
+                digitalWrite(led, LOW);
+                } }
+                delay(100);
+ }
